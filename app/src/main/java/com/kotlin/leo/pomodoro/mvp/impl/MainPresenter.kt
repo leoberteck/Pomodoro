@@ -152,7 +152,7 @@ class MainPresenter() : BaseObservable(), IMainPresenter {
         private val totalSeconds = mTimeLeft.get(Calendar.MINUTE) * 60
 
         fun tick(){
-            timeLeft.add(Calendar.SECOND, -10)
+            timeLeft.add(Calendar.SECOND, -1)
             val totalSecondsLeft = (timeLeft.get(Calendar.MINUTE) * 60) + timeLeft.get(Calendar.SECOND).toFloat()
             progress = (totalSecondsLeft * 100) / totalSeconds
             time = format.format(timeLeft.time)
