@@ -1,14 +1,22 @@
 package com.kotlin.leo.pomodoro.mvp.interfaces
 
-/**
- * Created by leo on 10/15/17.
- */
+import android.databinding.Bindable
+import android.databinding.Observable
+import com.kotlin.leo.pomodoro.configuration.PomodoroConfiguration
+
+
 interface ISettingsMvp {
     interface ISettingsFragment{
 
     }
 
-    interface ISettingsPresenter{
-
+    interface ISettingsPresenter : Observable {
+        var workSessionLength: Int
+        var restSessionLength : Int
+        var askBeforeSessionStart : Boolean
+        var vibrateWhenSessionEnds : Boolean
+        var playSoundWhenSessionEnds : Boolean
+        var doNotDisturbDuringWorkSession : Boolean
+        var keepScreenOn : Boolean
     }
 }

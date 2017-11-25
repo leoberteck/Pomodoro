@@ -7,6 +7,7 @@
         <variable name="time" type="String"/>
     </data>
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/progressLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.kotlin.leo.pomodoro.activity.MainActivity"

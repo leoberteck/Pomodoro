@@ -3,74 +3,123 @@
     <data>
         <variable name="presenter" type="com.kotlin.leo.pomodoro.mvp.impl.SettingsPresenter"/>
     </data>
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="15dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Session settings"
-            android:textStyle="bold"
-            android:textColor="@color/colorAccent"
-            android:layout_marginBottom="10dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Work session duration" />
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
-            <android.support.v7.widget.AppCompatSeekBar
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+            android:orientation="vertical"
+            android:padding="15dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="25"
-                android:layout_marginEnd="5dp"/>
+                android:text="@string/session_settings"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:layout_marginBottom="10dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="minutes"/>
+                android:text="@string/work_session_duration" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+                <android.support.v7.widget.AppCompatSeekBar
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:progress="@={presenter.workSessionLength}"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{String.valueOf(presenter.workSessionLength)}"
+                    android:layout_marginEnd="5dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minutes"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rest_session_duration"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+                <android.support.v7.widget.AppCompatSeekBar
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:progress="@={presenter.restSessionLength}"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{String.valueOf(presenter.restSessionLength)}"
+                    android:layout_marginEnd="5dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minutes"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/when_session_ends"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:layout_marginBottom="10dp"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ask_before_a_new_session_starts"
+                android:padding="20dp"
+                android:checked="@={presenter.askBeforeSessionStart}"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/vibrate_when_session_ends"
+                android:padding="20dp"
+                android:checked="@={presenter.vibrateWhenSessionEnds}"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/play_sound_when_session_ends"
+                android:padding="20dp"
+                android:checked="@={presenter.playSoundWhenSessionEnds}"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/during_a_session"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:layout_marginBottom="10dp"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/do_not_disturb_during_work_session"
+                android:padding="20dp"
+                android:checked="@={presenter.doNotDisturbDuringWorkSession}"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/keep_screen_on"
+                android:padding="20dp"
+                android:checked="@={presenter.keepScreenOn}"/>
         </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rest session duration"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
-            <android.support.v7.widget.AppCompatSeekBar
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="25"
-                android:layout_marginEnd="5dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="minutes"/>
-        </LinearLayout>
-
-        <!---->
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </ListView>
-
-    </LinearLayout>
+    </ScrollView>
 </layout>

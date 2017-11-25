@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), IMainMvp.IMainActivity, View.OnClickLi
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         presenter.setMainActivity(this)
-        progressFrame.setOnClickListener(this)
+        progressLayout.setOnClickListener(this)
         progressCircle.isEnabled = false
         fabStop.setOnClickListener(this)
     }
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), IMainMvp.IMainActivity, View.OnClickLi
     override fun onClick(p0: View?) {
         if (p0 != null) {
             when(p0.id){
-                R.id.progressFrame -> presenter.onPlayPauseClick()
+                R.id.progressLayout -> presenter.onPlayPauseClick()
                 R.id.fabStop -> presenter.onStopClick()
             }
         }
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(), IMainMvp.IMainActivity, View.OnClickLi
             if(fabStop.visibility == View.GONE){
                 fabStop.postOnAnimation({fabStop.visibility = View.VISIBLE})
                 val animation = AnimationUtils.loadAnimation(this, R.anim.abc_fade_in)
-                fabStop.startAnimation(animation);
+                fabStop.startAnimation(animation)
             }
         })
     }
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(), IMainMvp.IMainActivity, View.OnClickLi
             if(fabStop.visibility == View.VISIBLE) {
                 fabStop.postOnAnimation({ fabStop.visibility = View.GONE })
                 val animation = AnimationUtils.loadAnimation(this, R.anim.abc_fade_out)
-                fabStop.startAnimation(animation);
+                fabStop.startAnimation(animation)
             }
         })
     }

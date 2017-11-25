@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Pomodoro</string>
+    <string name="session_settings">Session settings</string>
+    <string name="work_session_duration">Work session duration</string>
+    <string name="minutes">minutes</string>
+    <string name="rest_session_duration">Rest session duration</string>
+    <string name="when_session_ends">When session ends</string>
+    <string name="ask_before_a_new_session_starts">Ask before a new session starts</string>
+    <string name="vibrate_when_session_ends">Vibrate when session ends</string>
+    <string name="play_sound_when_session_ends">Play sound when session ends</string>
+    <string name="during_a_session">During a session</string>
+    <string name="do_not_disturb_during_work_session">Do not disturb during work session</string>
+    <string name="keep_screen_on">Keep screen on</string>
 </resources>

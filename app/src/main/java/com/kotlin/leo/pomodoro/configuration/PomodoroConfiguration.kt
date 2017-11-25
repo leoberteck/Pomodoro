@@ -26,17 +26,37 @@ class PomodoroConfiguration private constructor() {
             App.instance.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     fun getWorkSessionLength(): Int {
-        return sharedPreferences.getInt(PREFERENCES_KEY_WORK_SESSION_LENGTH, 25);
+        return sharedPreferences.getInt(PREFERENCES_KEY_WORK_SESSION_LENGTH, 25)
     }
 
     fun getRestSessionLength(): Int {
-        return sharedPreferences.getInt(PREFERENCES_KEY_REST_SESSION_LENGTH, 5);
+        return sharedPreferences.getInt(PREFERENCES_KEY_REST_SESSION_LENGTH, 5)
     }
 
     fun getLastSessionType(): SessionType {
         return SessionType.valueOf(
                 sharedPreferences.getString(PREFERENCES_KEY_SESSION_STATE, SessionType.WORK_SESSION.toString())
         )
+    }
+
+    fun getAskBeforeSessionStart() : Boolean {
+        return sharedPreferences.getBoolean(PREFERENCES_KEY_ASK_BEFORE_SESSION_START, false)
+    }
+
+    fun getVibrateWhenSessionEnds() : Boolean {
+        return sharedPreferences.getBoolean(PREFERENCES_KEY_VIBRATE, false)
+    }
+
+    fun getPlaySoundWhenSessionEnds() : Boolean {
+        return sharedPreferences.getBoolean(PREFERENCES_KEY_PLAY_SOUND, false)
+    }
+
+    fun getDoNotDisturbDuringWorkSession() : Boolean {
+        return sharedPreferences.getBoolean(PREFERENCES_KEY_DO_NOT_DISTURB, false)
+    }
+
+    fun getKeepScreenOn() : Boolean {
+        return sharedPreferences.getBoolean(PREFERENCES_KEY_KEEP_SCREEN_ON, false)
     }
 
     fun setWorkSessionLength(length: Int) {
@@ -54,6 +74,36 @@ class PomodoroConfiguration private constructor() {
     fun setLastSessionState(sessionType: SessionType) {
         val editor = sharedPreferences.edit()
         editor.putString(PREFERENCES_KEY_SESSION_STATE, sessionType.toString())
+        editor.apply()
+    }
+
+    fun setAskBeforeSessionStart(value : Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(PREFERENCES_KEY_ASK_BEFORE_SESSION_START, value)
+        editor.apply()
+    }
+
+    fun setVibrateWhenSessionEnds(value : Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(PREFERENCES_KEY_VIBRATE, value)
+        editor.apply()
+    }
+
+    fun setPlaySoundWhenSessionEnds(value: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(PREFERENCES_KEY_PLAY_SOUND, value)
+        editor.apply()
+    }
+
+    fun setDoNotDisturbDuringWorkSession(value: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(PREFERENCES_KEY_DO_NOT_DISTURB, value)
+        editor.apply()
+    }
+
+    fun setKeepScreenOn(value: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(PREFERENCES_KEY_KEEP_SCREEN_ON, value)
         editor.apply()
     }
 }
