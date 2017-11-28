@@ -11,4 +11,5 @@
     <string name="during_a_session">During a session</string>
     <string name="do_not_disturb_during_work_session">Do not disturb during work session</string>
     <string name="keep_screen_on">Keep screen on</string>
+    <string name="title_activity_screen_slide">ScreenSlideActivity</string>
 </resources>

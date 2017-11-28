@@ -1,8 +1,6 @@
 package com.kotlin.leo.pomodoro.mvp.interfaces
 
-import android.databinding.Bindable
 import android.databinding.Observable
-import com.kotlin.leo.pomodoro.configuration.PomodoroConfiguration
 
 
 interface ISettingsMvp {

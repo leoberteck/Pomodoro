@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="presenter" type="com.kotlin.leo.pomodoro.mvp.impl.SettingsPresenter"/>
+        <variable name="PRESENTER" type="com.kotlin.leo.pomodoro.mvp.impl.SettingsPresenter"/>
     </data>
     <ScrollView
         android:layout_width="match_parent"
@@ -29,14 +30,16 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
                 <android.support.v7.widget.AppCompatSeekBar
+                    android:id="@+id/workSessionSeekBar"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:progress="@={presenter.workSessionLength}"/>
+                    android:max="120"
+                    android:progress="@={PRESENTER.workSessionLength}"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(presenter.workSessionLength)}"
+                    android:text="@{String.valueOf(PRESENTER.workSessionLength)}"
                     android:layout_marginEnd="5dp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -55,14 +58,16 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
                 <android.support.v7.widget.AppCompatSeekBar
+                    android:id="@+id/restSessionSeekBar"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:progress="@={presenter.restSessionLength}"/>
+                    android:max="30"
+                    android:progress="@={PRESENTER.restSessionLength}"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(presenter.restSessionLength)}"
+                    android:text="@{String.valueOf(PRESENTER.restSessionLength)}"
                     android:layout_marginEnd="5dp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -83,21 +88,21 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ask_before_a_new_session_starts"
                 android:padding="20dp"
-                android:checked="@={presenter.askBeforeSessionStart}"/>
+                android:checked="@={PRESENTER.askBeforeSessionStart}"/>
 
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/vibrate_when_session_ends"
                 android:padding="20dp"
-                android:checked="@={presenter.vibrateWhenSessionEnds}"/>
+                android:checked="@={PRESENTER.vibrateWhenSessionEnds}"/>
 
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/play_sound_when_session_ends"
                 android:padding="20dp"
-                android:checked="@={presenter.playSoundWhenSessionEnds}"/>
+                android:checked="@={PRESENTER.playSoundWhenSessionEnds}"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -112,14 +117,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/do_not_disturb_during_work_session"
                 android:padding="20dp"
-                android:checked="@={presenter.doNotDisturbDuringWorkSession}"/>
+                android:checked="@={PRESENTER.doNotDisturbDuringWorkSession}"/>
 
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/keep_screen_on"
                 android:padding="20dp"
-                android:checked="@={presenter.keepScreenOn}"/>
+                android:checked="@={PRESENTER.keepScreenOn}"/>
         </LinearLayout>
     </ScrollView>
 </layout>

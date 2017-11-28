@@ -4,19 +4,21 @@ import android.databinding.BaseObservable
 import com.kotlin.leo.pomodoro.configuration.PomodoroConfiguration
 import com.kotlin.leo.pomodoro.enum.PlayState
 import com.kotlin.leo.pomodoro.enum.SessionType
-import com.kotlin.leo.pomodoro.mvp.interfaces.IMainMvp.IMainActivity
-import com.kotlin.leo.pomodoro.mvp.interfaces.IMainMvp.IMainPresenter
+import com.kotlin.leo.pomodoro.mvp.interfaces.IMainMvp.ISessionFragment
+import com.kotlin.leo.pomodoro.mvp.interfaces.IMainMvp.ISessionPresenter
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.temporal.Temporal
 import java.util.*
 
-class MainPresenter() : BaseObservable(), IMainPresenter {
+class SessionPresenter : BaseObservable(), ISessionPresenter {
 
     private val restSessionLength = PomodoroConfiguration.instance.getRestSessionLength()
     private val workSessionLength = PomodoroConfiguration.instance.getWorkSessionLength()
     private var lastSessionType = PomodoroConfiguration.instance.getLastSessionType()
 
-    private var mainActivityWeakReference : WeakReference<IMainActivity>? = null
+    private var sessionFragmentWeakReference: WeakReference<ISessionFragment>? = null
     private var timer = Timer()
     private var bean : SessionBean? = null
 
@@ -36,14 +38,14 @@ class MainPresenter() : BaseObservable(), IMainPresenter {
         stopSession()
     }
 
-    override fun setMainActivity(mainActivity: IMainActivity){
-        mainActivityWeakReference = WeakReference(mainActivity)
+    override fun setFragment(sessionFragment: ISessionFragment){
+        sessionFragmentWeakReference = WeakReference(sessionFragment)
         //Atualiza os valores da view, quando ela for construída
         val _bean =  bean
         if(_bean != null){
-            mainActivityWeakReference?.get()?.onSessionTypeChanged(_bean.sessionType)
-            mainActivityWeakReference?.get()?.onPlayStateChanged(_bean.playState)
-            mainActivityWeakReference?.get()?.onProgressChanged(_bean.progress, _bean.time)
+            sessionFragmentWeakReference?.get()?.onSessionTypeChanged(_bean.sessionType)
+            sessionFragmentWeakReference?.get()?.onPlayStateChanged(_bean.playState)
+            sessionFragmentWeakReference?.get()?.onProgressChanged(_bean.progress, _bean.time)
         }
     }
 
@@ -57,12 +59,16 @@ class MainPresenter() : BaseObservable(), IMainPresenter {
         lastSessionType = newSessionType
 
         val timeLeft = Calendar.getInstance()
+
+        timeLeft.set(Calendar.HOUR, 0)
+        timeLeft.set(Calendar.MINUTE, 0)
+        timeLeft.set(Calendar.SECOND, 0)
+        timeLeft.set(Calendar.MILLISECOND, 0)
+
         timeLeft.set(Calendar.MINUTE, when(newSessionType){
             SessionType.WORK_SESSION -> workSessionLength
             else -> restSessionLength
         })
-        timeLeft.set(Calendar.SECOND, 0)
-        timeLeft.set(Calendar.MILLISECOND, 0)
 
         bean = SessionBean(
             {sender, propertyId -> onPropertyChanged(sender, propertyId)}
@@ -118,13 +124,13 @@ class MainPresenter() : BaseObservable(), IMainPresenter {
     private fun onPropertyChanged(sender : SessionBean, propertyId: PR) : Unit{
         when(propertyId){
             PR.sessionType -> {
-                mainActivityWeakReference?.get()?.onSessionTypeChanged(sender.sessionType)
+                sessionFragmentWeakReference?.get()?.onSessionTypeChanged(sender.sessionType)
             }
             PR.sessionPlayState -> {
-                mainActivityWeakReference?.get()?.onPlayStateChanged(sender.playState)
+                sessionFragmentWeakReference?.get()?.onPlayStateChanged(sender.playState)
             }
             PR.sessionProgress -> {
-                mainActivityWeakReference?.get()?.onProgressChanged(sender.progress, sender.time)
+                sessionFragmentWeakReference?.get()?.onProgressChanged(sender.progress, sender.time)
             }
         }
     }
@@ -142,21 +148,26 @@ class MainPresenter() : BaseObservable(), IMainPresenter {
                 onPropertyChanged(this, PR.sessionPlayState)
             }
 
-        private val format = SimpleDateFormat("mm : ss")
-        var time : String = format.format(mTimeLeft.time)
+        private val short = SimpleDateFormat("mm : ss")
+        private val long = SimpleDateFormat("hh : mm : ss")
+        var time : String = format(mTimeLeft)
             private set
         var progress : Float = 100F
             private set
 
         private val timeLeft : Calendar = mTimeLeft
-        private val totalSeconds = mTimeLeft.get(Calendar.MINUTE) * 60
+        private val totalSeconds = (timeLeft.get(Calendar.HOUR) * 3600) + (mTimeLeft.get(Calendar.MINUTE) * 60)
 
         fun tick(){
             timeLeft.add(Calendar.SECOND, -1)
-            val totalSecondsLeft = (timeLeft.get(Calendar.MINUTE) * 60) + timeLeft.get(Calendar.SECOND).toFloat()
+            val totalSecondsLeft = (timeLeft.get(Calendar.HOUR) * 3600) + (timeLeft.get(Calendar.MINUTE) * 60) + timeLeft.get(Calendar.SECOND).toFloat()
             progress = (totalSecondsLeft * 100) / totalSeconds
-            time = format.format(timeLeft.time)
+            time = format(timeLeft)
             onPropertyChanged(this, PR.sessionProgress)
+        }
+
+        private fun format(value : Calendar) : String{
+            return if(value.get(Calendar.HOUR) > 0) long.format(value.time) else short.format(value.time)
         }
     }
 
