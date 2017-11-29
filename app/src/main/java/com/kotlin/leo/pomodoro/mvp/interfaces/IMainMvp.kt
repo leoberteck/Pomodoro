@@ -8,6 +8,8 @@ interface IMainMvp {
         fun onSessionTypeChanged(newSessionType: SessionType)
         fun onPlayStateChanged(newPlayState: PlayState)
         fun onProgressChanged(progress : Float, text : String)
+
+        fun showStartNextSessionConfirmation()
     }
 
     interface ISessionPresenter {

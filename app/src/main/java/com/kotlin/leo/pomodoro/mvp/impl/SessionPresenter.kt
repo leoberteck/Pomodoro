@@ -14,9 +14,23 @@ import java.util.*
 
 class SessionPresenter : BaseObservable(), ISessionPresenter {
 
-    private val restSessionLength = PomodoroConfiguration.instance.getRestSessionLength()
-    private val workSessionLength = PomodoroConfiguration.instance.getWorkSessionLength()
-    private var lastSessionType = PomodoroConfiguration.instance.getLastSessionType()
+    private val restSessionLength
+        get() = PomodoroConfiguration.instance.getRestSessionLength()
+    private val workSessionLength
+        get() = PomodoroConfiguration.instance.getWorkSessionLength()
+    private var lastSessionType
+        get() = PomodoroConfiguration.instance.getLastSessionType()
+        set(value) = PomodoroConfiguration.instance.setLastSessionState(value)
+    private val askBeforeSessionStart
+        get() = PomodoroConfiguration.instance.getAskBeforeSessionStart()
+    private val vibrateWhenSessionEnd
+        get() = PomodoroConfiguration.instance.getVibrateWhenSessionEnds()
+    private val playSoundWhenSessionEnd
+        get() = PomodoroConfiguration.instance.getPlaySoundWhenSessionEnds()
+    private val doNotDisturbDuringWorkSession
+        get() = PomodoroConfiguration.instance.getDoNotDisturbDuringWorkSession()
+    private val keepScreenOn
+        get() = PomodoroConfiguration.instance.getKeepScreenOn()
 
     private var sessionFragmentWeakReference: WeakReference<ISessionFragment>? = null
     private var timer = Timer()
@@ -113,8 +127,12 @@ class SessionPresenter : BaseObservable(), ISessionPresenter {
                         timer.schedule(getTimerTask(), 1000)
                     //If session expired
                     }else{
-                        stopSession();
-                        startSession();
+                        stopSession()
+                        if(askBeforeSessionStart){
+                            sessionFragmentWeakReference?.get()?.showStartNextSessionConfirmation()
+                        }else{
+                            startSession()
+                        }
                     }
                 }
             }

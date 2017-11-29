@@ -13,7 +13,8 @@
         <activity
             android:name=".activity.ScreenSlideActivity"
             android:label="@string/title_activity_screen_slide"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

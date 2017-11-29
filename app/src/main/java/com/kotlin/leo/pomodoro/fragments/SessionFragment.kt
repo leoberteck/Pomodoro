@@ -30,13 +30,18 @@ class SessionFragment : Fragment(), IMainMvp.ISessionFragment, View.OnClickListe
         progressLayout.setOnClickListener(this)
         progressCircle.isEnabled = false
         fabStop.setOnClickListener(this)
+        btnStartNext.setOnClickListener(this)
     }
 
-    override fun onClick(p0: View?) {
-        if (p0 != null) {
-            when(p0.id){
+    override fun onClick(view: View?) {
+        if (view != null) {
+            when(view.id){
                 R.id.progressLayout -> PRESENTER.onPlayPauseClick()
                 R.id.fabStop -> PRESENTER.onStopClick()
+                R.id.btnStartNext -> {
+                    PRESENTER.onPlayPauseClick()
+                    startNextSessionFadeOut()
+                }
             }
         }
     }
@@ -68,53 +73,74 @@ class SessionFragment : Fragment(), IMainMvp.ISessionFragment, View.OnClickListe
     }
 
     override fun onProgressChanged(progress: Float, text: String) {
-        activity.runOnUiThread {
+        activity?.runOnUiThread {
             progressCircle.progress = progress
             txt_time.text = text
         }
     }
 
+    override fun showStartNextSessionConfirmation() {
+        startNextSessionFadeIn()
+    }
+
+    private fun startNextSessionFadeIn(){
+        viewFadeIn(btnStartNext)
+    }
+
+    private fun startNextSessionFadeOut(){
+        viewFadeOut(btnStartNext)
+    }
+
     private fun stopButtonFadeIn(){
-        activity.runOnUiThread({
-            if(fabStop.visibility == View.GONE){
-                fabStop.postOnAnimation({fabStop.visibility = View.VISIBLE})
-                val animation = AnimationUtils.loadAnimation(activity, R.anim.abc_fade_in)
-                fabStop.startAnimation(animation)
-            }
-        })
+        viewFadeIn(fabStop)
     }
 
     private fun stopButtonFadeOut(){
-        activity.runOnUiThread({
-            if(fabStop.visibility == View.VISIBLE) {
-                fabStop.postOnAnimation({ fabStop.visibility = View.GONE })
-                val animation = AnimationUtils.loadAnimation(activity, R.anim.abc_fade_out)
-                fabStop.startAnimation(animation)
+        viewFadeOut(fabStop)
+    }
+
+    private fun viewFadeIn(view: View){
+        activity?.runOnUiThread {
+            if(view.visibility == View.GONE){
+                view.postOnAnimation {view.visibility = View.VISIBLE}
+                val animation = AnimationUtils.loadAnimation(activity, R.anim.abc_fade_in)
+                view.startAnimation(animation)
             }
-        })
+        }
+    }
+
+    private fun viewFadeOut(view: View){
+        activity?.runOnUiThread {
+            if(view.visibility == View.VISIBLE){
+                view.postOnAnimation {view.visibility = View.GONE}
+                val animation = AnimationUtils.loadAnimation(activity, R.anim.abc_fade_out)
+                view.startAnimation(animation)
+            }
+        }
     }
 
     private fun startBlinking(){
-        activity.runOnUiThread({
+        activity?.runOnUiThread({
             val animation = AnimationUtils.loadAnimation(activity, R.anim.blink)
             txt_time.startAnimation(animation)
         })
     }
 
     private fun stopBlinking(){
-        activity.runOnUiThread({
+        activity?.runOnUiThread({
             txt_time.animation?.cancel()
             txt_time.clearAnimation()
         })
     }
 
     private fun updateViewColors(color: Int) {
-        activity.runOnUiThread({
+        activity?.runOnUiThread({
             val parsedColor = ContextCompat.getColor(activity, color)
             progressCircle.circleProgressColor = parsedColor
             progressCircle.pointerColor = parsedColor
             txt_time.setTextColor(parsedColor)
             fabStop.backgroundTintList = activity.getColorStateList(color)
+            btnStartNext.setTextColor(parsedColor)
         })
     }
 }
