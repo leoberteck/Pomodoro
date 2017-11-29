@@ -12,4 +12,6 @@
     <string name="do_not_disturb_during_work_session">Do not disturb during work session</string>
     <string name="keep_screen_on">Keep screen on</string>
     <string name="title_activity_screen_slide">ScreenSlideActivity</string>
+    <string name="session_ended">Session ended</string>
+    <string name="your_session_has_come_to_an_end">Your session timer has come to an end</string>
 </resources>

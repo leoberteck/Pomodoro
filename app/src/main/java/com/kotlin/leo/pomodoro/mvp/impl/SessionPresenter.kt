@@ -1,5 +1,6 @@
 package com.kotlin.leo.pomodoro.mvp.impl
 
+import android.content.Context
 import android.databinding.BaseObservable
 import com.kotlin.leo.pomodoro.configuration.PomodoroConfiguration
 import com.kotlin.leo.pomodoro.enum.PlayState
@@ -11,6 +12,13 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.temporal.Temporal
 import java.util.*
+import android.content.Context.VIBRATOR_SERVICE
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import com.kotlin.leo.pomodoro.App
+import com.kotlin.leo.pomodoro.R
+
 
 class SessionPresenter : BaseObservable(), ISessionPresenter {
 
@@ -128,6 +136,14 @@ class SessionPresenter : BaseObservable(), ISessionPresenter {
                     //If session expired
                     }else{
                         stopSession()
+                        if(vibrateWhenSessionEnd){
+                            sessionFragmentWeakReference?.get()?.vibrate(300)
+                        }
+                        if(playSoundWhenSessionEnd){
+                            sessionFragmentWeakReference?.get()?.notifySessionEnded(
+                                R.string.session_ended, R.string.your_session_has_come_to_an_end
+                            )
+                        }
                         if(askBeforeSessionStart){
                             sessionFragmentWeakReference?.get()?.showStartNextSessionConfirmation()
                         }else{
@@ -139,7 +155,7 @@ class SessionPresenter : BaseObservable(), ISessionPresenter {
         }
     }
 
-    private fun onPropertyChanged(sender : SessionBean, propertyId: PR) : Unit{
+    private fun onPropertyChanged(sender : SessionBean, propertyId: PR){
         when(propertyId){
             PR.sessionType -> {
                 sessionFragmentWeakReference?.get()?.onSessionTypeChanged(sender.sessionType)

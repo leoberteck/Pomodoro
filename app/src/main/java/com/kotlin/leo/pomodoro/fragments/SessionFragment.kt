@@ -1,18 +1,32 @@
 package com.kotlin.leo.pomodoro.fragments
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import com.kotlin.leo.pomodoro.App
 import com.kotlin.leo.pomodoro.R
 import com.kotlin.leo.pomodoro.enum.PlayState
 import com.kotlin.leo.pomodoro.enum.SessionType
 import com.kotlin.leo.pomodoro.mvp.impl.SessionPresenter
 import com.kotlin.leo.pomodoro.mvp.interfaces.IMainMvp
 import kotlinx.android.synthetic.main.fragment_pomodoro.*
+import android.media.RingtoneManager
+import android.media.Ringtone
+import android.support.v4.app.NotificationCompat
+import com.kotlin.leo.pomodoro.R.mipmap.ic_launcher
+import android.app.NotificationManager
+import android.support.annotation.StringRes
+
 
 class SessionFragment : Fragment(), IMainMvp.ISessionFragment, View.OnClickListener {
 
@@ -38,10 +52,7 @@ class SessionFragment : Fragment(), IMainMvp.ISessionFragment, View.OnClickListe
             when(view.id){
                 R.id.progressLayout -> PRESENTER.onPlayPauseClick()
                 R.id.fabStop -> PRESENTER.onStopClick()
-                R.id.btnStartNext -> {
-                    PRESENTER.onPlayPauseClick()
-                    startNextSessionFadeOut()
-                }
+                R.id.btnStartNext -> PRESENTER.onPlayPauseClick()
             }
         }
     }
@@ -57,6 +68,7 @@ class SessionFragment : Fragment(), IMainMvp.ISessionFragment, View.OnClickListe
     override fun onPlayStateChanged(newPlayState: PlayState) {
         when(newPlayState){
             PlayState.PLAYING -> {
+                btnNextSessionFadeOut()
                 stopButtonFadeOut()
                 stopBlinking()
             }
@@ -80,14 +92,50 @@ class SessionFragment : Fragment(), IMainMvp.ISessionFragment, View.OnClickListe
     }
 
     override fun showStartNextSessionConfirmation() {
-        startNextSessionFadeIn()
+        btnNextSessionFadeIn()
     }
 
-    private fun startNextSessionFadeIn(){
+    override fun vibrate(milliseconds: Long) {
+        val v = activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            v.vibrate(milliseconds)
+        }
+    }
+
+    override fun notifySessionEnded(@StringRes title: Int, @StringRes message : Int){
+        try {
+            val alertSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+
+            val mBuilder =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        NotificationCompat.Builder(activity, NotificationChannel.DEFAULT_CHANNEL_ID)
+                    } else {
+                        NotificationCompat.Builder(activity)
+                    }
+
+            mBuilder.setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(getString(title))
+                .setContentText(getString(message))
+                .setAutoCancel(true)
+                .setTimeoutAfter(5000)
+                .setSound(alertSound)
+                .build()
+
+            val mNotificationManager = activity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            mNotificationManager.notify(0, mBuilder.build())
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun btnNextSessionFadeIn(){
         viewFadeIn(btnStartNext)
     }
 
-    private fun startNextSessionFadeOut(){
+    private fun btnNextSessionFadeOut(){
         viewFadeOut(btnStartNext)
     }
 
